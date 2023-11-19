@@ -16,33 +16,22 @@ const { Sequelize, DataTypes } = require('sequelize');
 //     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 //     username VARCHAR(255) NOT NULL,
 //     password VARCHAR(255) NOT NULL,
+//     email VARCHAR(255) UNIQUE NOT NULL,
 //     tier_level VARCHAR(255) NOT NULL,
-//     tier_count INT GENERATED ALWAYS AS (
-//         CASE
-//             WHEN tier_level = 'tier 1' THEN 1000
-//             WHEN tier_level = 'tier 2' THEN 500
-//             WHEN tier_level = 'tier free' THEN 100
-//             ELSE NULL
-//         END
-//     ) STORED
+//     tier_count INT 
 // );
-// Column   |          Type          | Collation | Nullable |                        Default
-// ------------+------------------------+-----------+----------+--------------------------------------------------------
-//  id         | uuid                   |           | not null | uuid_generate_v4()
-//  username   | character varying(255) |           | not null |
-//  password   | character varying(255) |           | not null |
-//  email      | character varying(255) |           | not null |
-//  tier_level | character varying(255) |           | not null |
-//  tier_count | integer                |           |          | generated always as (                                 +
-//             |                        |           |          | CASE                                                  +
-//             |                        |           |          |     WHEN tier_level::text = 'tier 1'::text THEN 1000  +
-//             |                        |           |          |     WHEN tier_level::text = 'tier 2'::text THEN 500   +
-//             |                        |           |          |     WHEN tier_level::text = 'tier free'::text THEN 100+
-//             |                        |           |          |     ELSE NULL::integer                                +
-//             |                        |           |          | END) stored
+// Table "public.users"
+// Column   |          Type          | Collation | Nullable |      Default
+// ------------+------------------------+-----------+----------+--------------------
+// id         | uuid                   |           | not null | uuid_generate_v4()
+// username   | character varying(255) |           | not null |
+// password   | character varying(255) |           | not null |
+// email      | character varying(255) |           | not null |
+// tier_level | character varying(255) |           | not null |
+// tier_count | integer                |           |          |
 // Indexes:
-//     "users_pkey" PRIMARY KEY, btree (id)
-//     "users_email_key" UNIQUE CONSTRAINT, btree (email)
+//  "users_pkey" PRIMARY KEY, btree (id)
+//  "users_email_key" UNIQUE CONSTRAINT, btree (email)
 
 // The following query was used to create the Urls table.
 // CREATE TABLE IF NOT EXISTS Urls (
@@ -53,15 +42,30 @@ const { Sequelize, DataTypes } = require('sequelize');
 //     url_updated TIMESTAMP DEFAULT NOW()
 // );
 // Table "public.urls"
-// Column  |          Type          | Collation | Nullable |      Default
-// ----------+------------------------+-----------+----------+--------------------
-// id       | uuid                   |           | not null | uuid_generate_v4()
-// longurl  | text                   |           | not null |
-// shorturl | character varying(255) |           | not null |
+// Column    |           Type           | Collation | Nullable |      Default
+// -------------+--------------------------+-----------+----------+--------------------
+// id          | uuid                     |           | not null | uuid_generate_v4()
+// longurl     | text                     |           | not null |
+// shorturl    | character varying(255)   |           | not null |
+// url_created | timestamp with time zone |           | not null | CURRENT_TIMESTAMP
+// url_updated | timestamp with time zone |           | not null | CURRENT_TIMESTAMP
 // Indexes:
-//   "urls_pkey" PRIMARY KEY, btree (id)
-//   "urls_longurl_key" UNIQUE CONSTRAINT, btree (longurl)
-//   "urls_shorturl_key" UNIQUE CONSTRAINT, btree (shorturl)
+//  "urls_pkey" PRIMARY KEY, btree (id)
+//  "urls_longurl_key" UNIQUE CONSTRAINT, btree (longurl)
+//  "urls_shorturl_key" UNIQUE CONSTRAINT, btree (shorturl)
+
+// The following query was used to create the User_Urls table.
+// CREATE TABLE IF NOT EXISTS user_urls (
+//     userid UUID NOT NULL,
+//     userurl VARCHAR(255) UNIQUE NOT NULL
+// );
+// Table "public.user_urls"
+// Column  |          Type          | Collation | Nullable | Default
+// ---------+------------------------+-----------+----------+---------
+// userid  | uuid                   |           | not null |
+// userurl | character varying(255) |           | not null |
+// Indexes:
+//    "user_urls_userurl_key" UNIQUE CONSTRAINT, btree (userurl)
 
 // Declaring environment variables.
 const dbDialect = process.env.DB_DIALECT;
@@ -118,44 +122,47 @@ const Users = sequelize.define('users', {
     timestamps: false
 });
 
-const dbConfig = {
-    host: dbHost,
-    user: dbDialect,
-    port: dbPort,
-    password: dbPass,
-    database: dbName
-};
-const pool = new Pool(dbConfig);
 
-async function modifyTierCountColumn() {
-    const client = await pool.connect();
+// Changing structure of users table, as generated values in tier_count column cannot be modified. No need for the code below, creating table
+// as usual from now on, changing to INT only.
+// const dbConfig = {
+//     host: dbHost,
+//     user: dbDialect,
+//     port: dbPort,
+//     password: dbPass,
+//     database: dbName
+// };
+// const pool = new Pool(dbConfig);
 
-    try {
-        await client.query('BEGIN');
+// async function modifyTierCountColumn() {
+//     const client = await pool.connect();
 
-        await client.query('ALTER TABLE Users DROP COLUMN IF EXISTS tier_count');
+//     try {
+//         await client.query('BEGIN');
 
-        await client.query(`
-            ALTER TABLE Users
-            ADD COLUMN tier_count INT GENERATED ALWAYS AS (
-                CASE
-                    WHEN tier_level = 'tier 1' THEN 1000
-                    WHEN tier_level = 'tier 2' THEN 500
-                    WHEN tier_level = 'tier free' THEN 100
-                    ELSE NULL
-                END
-            ) STORED
-        `);
+//         await client.query('ALTER TABLE Users DROP COLUMN IF EXISTS tier_count');
 
-        await client.query('COMMIT');
-        console.log('Column modification successful.');
-    } catch (error) {
-        await client.query('ROLLBACK');
-        console.error('Error during column modification:', error);
-    } finally {
-        client.release();
-    }
-}
+//         await client.query(`
+//             ALTER TABLE Users
+//             ADD COLUMN tier_count INT GENERATED ALWAYS AS (
+//                 CASE
+//                     WHEN tier_level = 'tier 1' THEN 1000
+//                     WHEN tier_level = 'tier 2' THEN 500
+//                     WHEN tier_level = 'tier free' THEN 100
+//                     ELSE NULL
+//                 END
+//             ) STORED
+//         `);
+
+//         await client.query('COMMIT');
+//         console.log('Column modification successful.');
+//     } catch (error) {
+//         await client.query('ROLLBACK');
+//         console.error('Error during column modification:', error);
+//     } finally {
+//         client.release();
+//     }
+// }
 
 // Defining Urls schema.
 
@@ -204,6 +211,37 @@ const Urls = sequelize2.define('urls', {
 
 });
 
+// Defining Urls schema.
+
+const sequelize3 = new Sequelize({
+    dialect: dbDialect,
+    host: dbHost,
+    database: dbName,
+    username: dbUser,
+    password: dbPass,
+    // dialectOptions: {
+    //     ssl: {
+    //         require: true,
+    //         rejectUnauthorized: false
+    //     }
+    // }
+});
+
+const User_Urls = sequelize3.define('urls', {
+    userid: {
+        type: DataTypes.UUID,
+        allowNull: false
+    },
+    userurl: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        unique: true
+    }
+}, {
+    tableName: 'user_urls',
+    timestamps: false
+});
+
 
 // Middleware to parse JSON requests
 router.use(express.json());
@@ -242,12 +280,17 @@ async function initializeDatabase() {
                 tier_level: {
                     type: Sequelize.STRING,
                     allowNull: false,
+                },
+                tier_count: {
+                    type: Sequelize.INTEGER,
+                    allowNull: true,
                 }
             });
         }
 
+        // No longer need the code below.
         // Altering column manually, as sequelize cannot currently alter table with functions.
-        modifyTierCountColumn();
+        // modifyTierCountColumn();
 
         // Check if the "Urls" table exists
         const UrlsTableExists = await sequelize2.getQueryInterface().showAllTables();
@@ -283,6 +326,26 @@ async function initializeDatabase() {
                 },
             });
         }
+
+        // Check if the "Urls" table exists
+        const UserUrlsTableExists = await sequelize3.getQueryInterface().showAllTables();
+
+        if (!UserUrlsTableExists.includes('user_urls')) {
+            // The "Urls" table doesn't exist, so create it
+            await sequelize3.getQueryInterface().createTable('user_urls', {
+                userid: {
+                    type: Sequelize.UUID,
+                    allowNull: false
+                },
+                userurl: {
+                    type: Sequelize.STRING,
+                    allowNull: false,
+                    unique: true
+                }
+            });
+        }
+        // Alternatively, we can use : await sequelize.sync(); & await sequelize2.sync();
+
 
     } catch (error) {
         console.error('Error initializing database:', error);

@@ -104,4 +104,5 @@ router.all('/healthcheckAPI', (req, res) => {
     console.log("405");
 });
 
+// Exporting module.
 module.exports = router
