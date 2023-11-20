@@ -24,39 +24,71 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
 // The object below has the postgres test DB credentials / configurations. Port : 5432, name : test, user : postgres.
-const dbConfig4 = {
+
+const UrlsSequelize = new Sequelize({
+    dialect: dbDialect,
     host: dbHost,
-    user: dbDialect,
-    port: dbPort,
+    database: dbName,
+    username: dbUser,
     password: dbPass,
-    database: dbName
-};
-const pool4 = new Pool(dbConfig4);
-
-// Endpoint to redirect
-app.get('/:shortId', async (req, res) => {
-    try {
-        let fullUrl = "http://shorteningurl.sunil.ai/" + req.params.shortId
-        //console.log(fullUrl)
-        const result = await pool4.query(
-            'SELECT longurl FROM Urls WHERE shorturl = $1',
-            [fullUrl]
-        );
-
-        if (result.rows.length === 0) {
-            return res.status(404).send('URL not found');
-        }
-        const originalUrl = result.rows[0].longurl;
-        console.log(originalUrl)
-        res.redirect("https://" + originalUrl);
-        // res.status(203).send('found');
-        //res.redirect(rows[0].longurl);
-
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
+    // dialectOptions: {
+    //     ssl: {
+    //         require: true,
+    //         rejectUnauthorized: false
+    //     }
+    // }
+});
+const Urls = UrlsSequelize.define('urls', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+    },
+    longurl: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        unique: true,
+    },
+    shorturl: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        unique: true,
+    },
+    createdAt: {
+        field: 'url_created',
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    updatedAt: {
+        field: 'url_updated',
+        type: DataTypes.DATE,
+        allowNull: false,
     }
+}, {
+    tableName: 'urls',
+    id: false
+});
+// Endpoint to redirect
+router.get('/:shortId', async (req, res) => {
+
+    let fullUrl = "http://shortenify.anirudhvijayaraghavan.me/" + req.params.shortId
+    Urls.findOne({
+        where: {
+            shorturl: fullUrl,
+        },
+    })
+        .then((url) => {
+            if (url) {
+                // URL found, now we are redirecting
+                res.redirect(url.longurl);
+            } else {
+                // No URL found with the provided shortid
+                res.status(404).json({ error: 'No URLs found.' });
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 });
 
 

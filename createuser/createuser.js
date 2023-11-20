@@ -6,7 +6,7 @@ const uuidv4 = require('uuid');
 const app = express();
 const router = express.Router();
 require('dotenv').config();
-
+const { body, validationResult } = require('express-validator');
 const { Pool } = require('pg');
 const { Sequelize, DataTypes } = require('sequelize');
 
@@ -25,63 +25,140 @@ router.use(bodyParser.urlencoded({ extended: false }));
 
 
 // The object below has the postgres test DB credentials / configurations. Port : 5432, name : test, user : postgres.
-const dbConfig2 = {
+
+const UserSequelize = new Sequelize({
+    dialect: dbDialect,
     host: dbHost,
-    user: dbDialect,
-    port: dbPort,
+    database: dbName,
+    username: dbUser,
     password: dbPass,
-    database: dbName
-};
-const pool2 = new Pool(dbConfig2);
-
-// Function to validate the tier level
-const isValidTier = (tier) => ['tier 1', 'tier 2', 'tier free'].includes(tier);
-
-// INSERT User ON SUCCESSFUL AUTHENTICATION.
-router.post('/createuser', async (req, res) => {
-
-    let regExFirstName = /^[A-Za-z]+$/;
-    let regExEmail = /[a-z0-9]+@northeastern.edu/;
-    let regExPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]{8,}$/;
-    const { username, password, email, tier_level } = req.body;
-    let tier_count;
-    if (tier_level === 'tier 1') {
-        tier_count = 1000;
-    } else if (tier_level === 'tier 2') {
-        tier_count = 500;
-    } else if (tier_level === 'tier free') {
-        tier_count = 10;
+    // dialectOptions: {
+    //     ssl: {
+    //         require: true,
+    //         rejectUnauthorized: false
+    //     }
+    // }
+});
+const Users = UserSequelize.define('users', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+    },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    tier_level: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    tier_count: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
-    else {
-        res.status(400).send('Bad request - Tier levels can only be tier 1, tier 2, or tier free.');
-    }
+}, {
+    tableName: 'users',
+    timestamps: false
+});
 
-    // Validate input
-    if (!username || typeof username !== 'string' || !password || !email || !isValidTier(tier_level)) {
-        return res.status(400).send('Invalid input');
-    }
 
-    try {
-        // Check if email already exists
-        const emailExists = await pool2.query('SELECT * FROM Users WHERE email = $1', [email]);
-        if (emailExists.rows.length > 0) {
-            return res.status(400).send('Email already exists');
+// INSERT User ON SUCCESSFUL VALIDATIONS.
+router.post('/createuser', [
+    body('username')
+        .not().isEmpty().withMessage('Name cannot be empty')
+        .isString().withMessage('Name must be a string'),
+
+    body('password')
+        .not().isEmpty().withMessage('Password cannot be empty')
+        .isString().withMessage('Password must be a string'),
+
+    body('email')
+        .not().isEmpty().withMessage('Email cannot be empty')
+        .isString().withMessage('Email must be a string'),
+
+    body('tier_level')
+        .not().isEmpty().withMessage('Tier level cannot be empty')
+        .isString().withMessage('Tier level must be a string')
+        .custom(value => {
+            const tier1 = 'tier 1';
+            const tier2 = 'tier 2';
+            const tierf = 'tier free';
+            console.log(String(value).toLowerCase());
+            if ((String(value).toLowerCase() === tier1.toLowerCase()) || (String(value).toLowerCase() === tier2.toLowerCase()) || (String(value).toLowerCase() === tierf.toLowerCase())) {
+                return true;
+            } else {
+                throw new Error('Tier level must be either Tier 1, tier 2, or Tier free.');
+            }
+
+        })
+], async (req, res) => {
+
+    if (Object.keys(req.body).length > 0) {
+        // Check for validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(400).json({ error: 'Incomplete or bad parameters, check table specifications.' });
+            console.log(errors.array());
         }
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        else {
+            const { username, password, email, tier_level } = req.body;
+            let tier_count;
+            if (String(tier_level).toLowerCase() === 'tier 1') {
+                tier_count = 1000;
+            } else if (String(tier_level).toLowerCase() === 'tier 2') {
+                tier_count = 500;
+            } else if (String(tier_level).toLowerCase() === 'tier free') {
+                tier_count = 10;
+            }
+            else {
+                res.status(400).send('Bad request - Tier levels can only be tier 1, tier 2, or tier free.');
+            }
 
-        // Insert the new user into the database
-        const newUser = await pool2.query(
-            'INSERT INTO Users (username, password, email, tier_level, tier_count) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [username, hashedPassword, email, tier_level, tier_count]
-        );
+            // Finding an existing user
+            const existingUser = await Users.findOne({ where: { email: email } });
 
-        res.status(201).json(newUser.rows[0]);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
+            if (!existingUser) {
+                // Hash the password using bcrypt
+                const hashedPassword = await bcrypt.hash(password, 10);
+
+                // Insert user data into the database
+                try {
+                    await Users.create({
+                        username: username,
+                        password: hashedPassword,
+                        email: email,
+                        tier_level: tier_level,
+                        tier_count: tier_count
+                    }).then((createdUser) => {
+                        res.status(201).json(createdUser);
+                    })
+                        .catch((error) => {
+                            console.error(error);
+                        });
+                } catch (error) {
+                    res.status(500).send('Server error');
+                    console.error(error);
+                }
+            } else {
+                res.status(400).json({ error: 'Email already exists.' });
+            }
+        }
     }
+    else {
+        res.status(400).json({ error: 'Incomplete or bad parameters, check table specifications.' });
+    }
+
 });
 
 // Exporting module.

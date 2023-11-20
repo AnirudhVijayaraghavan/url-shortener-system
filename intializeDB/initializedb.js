@@ -65,7 +65,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 // userid  | uuid                   |           | not null |
 // userurl | character varying(255) |           | not null |
 // Indexes:
-//    "user_urls_userurl_key" UNIQUE CONSTRAINT, btree (userurl)
+//    "user_urls_pkey" PRIMARY KEY, btree (userurl)
 
 // Declaring environment variables.
 const dbDialect = process.env.DB_DIALECT;
@@ -115,7 +115,7 @@ const Users = sequelize.define('users', {
     },
     tier_count: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     }
 }, {
     tableName: 'users',
@@ -227,7 +227,7 @@ const sequelize3 = new Sequelize({
     // }
 });
 
-const User_Urls = sequelize3.define('urls', {
+const User_Urls = sequelize3.define('user_urls', {
     userid: {
         type: DataTypes.UUID,
         allowNull: false
@@ -235,7 +235,8 @@ const User_Urls = sequelize3.define('urls', {
     userurl: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        unique: true
+        unique: true,
+        primaryKey: true
     }
 }, {
     tableName: 'user_urls',
@@ -340,7 +341,8 @@ async function initializeDatabase() {
                 userurl: {
                     type: Sequelize.STRING,
                     allowNull: false,
-                    unique: true
+                    unique: true,
+                    primaryKey: true
                 }
             });
         }

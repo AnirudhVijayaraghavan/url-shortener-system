@@ -24,16 +24,83 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
 // The object below has the postgres test DB credentials / configurations. Port : 5432, name : test, user : postgres.
-const dbConfig5 = {
-    host: dbHost,
-    user: dbDialect,
-    port: dbPort,
-    password: dbPass,
-    database: dbName
-};
-const pool5 = new Pool(dbConfig5);
 
-// Endpoint to redirect
+const UserSequelize = new Sequelize({
+    dialect: dbDialect,
+    host: dbHost,
+    database: dbName,
+    username: dbUser,
+    password: dbPass,
+    // dialectOptions: {
+    //     ssl: {
+    //         require: true,
+    //         rejectUnauthorized: false
+    //     }
+    // }
+});
+const Users = UserSequelize.define('users', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+    },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    tier_level: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    tier_count: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    }
+}, {
+    tableName: 'users',
+    timestamps: false
+});
+
+const UserUrlsSequelize = new Sequelize({
+    dialect: dbDialect,
+    host: dbHost,
+    database: dbName,
+    username: dbUser,
+    password: dbPass,
+    // dialectOptions: {
+    //     ssl: {
+    //         require: true,
+    //         rejectUnauthorized: false
+    //     }
+    // }
+});
+const User_Urls = UserUrlsSequelize.define('user_urls', {
+    userid: {
+        type: DataTypes.UUID,
+        allowNull: false
+    },
+    userurl: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        unique: true,
+        primaryKey: true
+    }
+}, {
+    tableName: 'user_urls',
+    timestamps: false
+});
+
+// Endpoint to get all urls for an authenticated user.
+// GET ALL URLS FOR A USER ON SUCCESSFUL AUTHENTICATION.
 router.get('/user/getallurls', async (req, res) => {
     //CODE TO CHECK IF ONLY BASIC AUTHENTICATION IS SELECTED
     if (!req.headers.authorization || req.headers.authorization.indexOf('Basic') === -1) {
@@ -46,43 +113,46 @@ router.get('/user/getallurls', async (req, res) => {
     const base64Credentials = req.headers.authorization.split(' ')[1];
     const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
     const [email, password] = credentials.split(':');
-
-    try {
-        // Query user from the database
-        const userResult = await pool5.query('SELECT * FROM users WHERE email = $1', [email]);
-        if (userResult.rows.length === 0) {
-            return res.status(401).send('Email not found');
-        }
-
-        const user = userResult.rows[0];
-
-        // Verify password
-        const validPassword = await bcrypt.compare(password, user.password);
-        if (!validPassword) {
-            return res.status(401).send('Authentication failed');
-        }
-
-        // Fetching data
-        console.log(userResult.rows[0].id)
-        const fetchingdatafull = await pool5.query('SELECT * FROM user_urls WHERE userid=$1', [userResult.rows[0].id]);
-        if (fetchingdatafull == null) {
-            res.status(404).send('No urls found with the authenticated user');
-        }
-
-        else {
-
-            console.log(fetchingdatafull.rows);
-            res.status(200).send(fetchingdatafull.rows);
-
-        }
-
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
-    }
+    Users.findOne({
+        where: {
+            email: email,
+        },
+    })
+        .then((user) => {
+            if (user) {
+                // Account found, now compare the provided password with the stored hashed password
+                bcrypt.compare(password, user.password, (err, result) => {
+                    if (err) {
+                        console.error(err);
+                    } else if (result) {
+                        // Passwords match, proceed with retrieving assignments
+                        User_Urls.findAll(
+                            {
+                                where: {
+                                    userid: user.id,
+                                }
+                            })
+                            .then((urls) => {
+                                res.status(200).json(urls);
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
+                    } else {
+                        // Passwords do not match
+                        res.status(401).json({ error: 'Unauthorized - Wrong password.' });
+                    }
+                });
+            } else {
+                // No account found with the provided email
+                res.status(401).json({ error: 'Unauthorized - No email found.' });
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    
 });
-
 
 
 // Exporting module.
