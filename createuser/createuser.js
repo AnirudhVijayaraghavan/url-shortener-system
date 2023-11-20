@@ -97,7 +97,7 @@ router.post('/createuser', [
             if ((String(value).toLowerCase() === tier1.toLowerCase()) || (String(value).toLowerCase() === tier2.toLowerCase()) || (String(value).toLowerCase() === tierf.toLowerCase())) {
                 return true;
             } else {
-                throw new Error('Tier level must be either Tier 1, tier 2, or Tier free.');
+                throw new Error('Tier level must be either Tier 1, Tier 2, or Tier free.');
             }
 
         })
@@ -138,7 +138,7 @@ router.post('/createuser', [
                         username: username,
                         password: hashedPassword,
                         email: email,
-                        tier_level: tier_level,
+                        tier_level: String(tier_level).toLowerCase(),
                         tier_count: tier_count
                     }).then((createdUser) => {
                         res.status(201).json(createdUser);

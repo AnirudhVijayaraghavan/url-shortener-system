@@ -155,18 +155,7 @@ router.post('/submitpreferredurl', [
         .not().isEmpty().withMessage('Your preferred shorturl cannot be empty')
         .isString().withMessage('Your URL must be a string')
         .isLength({ max: 8 }).withMessage('Field must be at most 8 characters long')
-        .custom(value => {
-            const tier1 = 'tier 1';
-            const tier2 = 'tier 2';
-            const tierf = 'tier free';
-            console.log(String(value).toLowerCase());
-            if ((String(value).toLowerCase() === tier1.toLowerCase()) || (String(value).toLowerCase() === tier2.toLowerCase()) || (String(value).toLowerCase() === tierf.toLowerCase())) {
-                return true;
-            } else {
-                throw new Error('Tier level must be either Tier 1, tier 2, or Tier free.');
-            }
-
-        })
+        .isAlphanumeric().withMessage('Field must contain only alphanumeric characters')
 ], async (req, res) => {
     if (!req.headers.authorization || req.headers.authorization.indexOf('Basic') === -1) {
         return res.status(403).json({
@@ -177,7 +166,7 @@ router.post('/submitpreferredurl', [
     const base64Credentials = req.headers.authorization.split(' ')[1];
     const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
     const [email, password] = credentials.split(':');
-    const { longUrl } = req.body;
+    const { longUrl, preferredShorty } = req.body;
     Users.findOne({
         where: {
             email: email,
@@ -202,61 +191,67 @@ router.post('/submitpreferredurl', [
                                 // Passwords match, proceed with creating url and url mappings.
                                 // Finding an existing URL
                                 const existingUrl = await Urls.findOne({ where: { longurl: longUrl } });
+                                const existingShortUrl = await Urls.findOne({ where: { shorturl: 'http://shortenify.anirudhvijayaraghavan.me/' + preferredShorty } });
+
 
                                 if (!existingUrl) {
+                                    if (!existingShortUrl) {
+                                        // Inserting URL data into the database, in case there is no matching URL found.
+                                        try {
+                                            if (user.tier_count <= 0) {
+                                                res.status(400).json({ error: 'Request quota for the month exceeded.' });
+                                                console.log(errors.array());
 
-                                    // Inserting URL data into the database, in case there is no matching URL found.
-                                    try {
-                                        if (user.tier_count <= 0) {
-                                            res.status(400).json({ error: 'Request quota for the month exceeded.' });
-                                            console.log(errors.array());
+                                            } else {
+                                                await Urls.create({
+                                                    longurl: longUrl,
+                                                    shorturl: 'http://shortenify.anirudhvijayaraghavan.me/' + preferredShorty,
 
-                                        } else {
-                                            await Urls.create({
-                                                longurl: longUrl,
-                                                shorturl: 'http://shortenify.anirudhvijayaraghavan.me/' + String(Math.floor(Math.random() * 1000000000)),
+                                                }).then((createdUrl) => {
+                                                    res.status(201).json(createdUrl);
+                                                    // Creating user_url mapping.
+                                                    User_Urls.create({
+                                                        userid: user.id,
+                                                        userurl: createdUrl.shorturl
+                                                    }).then((createduserurl) => {
+                                                        console.log("New User_URL created.")
+                                                    })
+                                                        .catch((error) => {
+                                                            console.error(error);
+                                                        });
 
-                                            }).then((createdUrl) => {
-                                                res.status(201).json(createdUrl);
-                                                // Creating user_url mapping.
-                                                User_Urls.create({
-                                                    userid: user.id,
-                                                    userurl: createdUrl.shorturl
-                                                }).then((createduserurl) => {
-                                                    console.log("New User_URL created.")
+                                                    // Updating tier_count, decrementing by 1.
+                                                    Users.update({
+                                                        tier_count: user.tier_count - 1
+                                                    },
+                                                        {
+                                                            where: {
+                                                                email: email,
+                                                            },
+                                                        }
+                                                    ).then((createduserurl) => {
+                                                        console.log("User tier_count updated.")
+                                                    })
+                                                        .catch((error) => {
+                                                            console.error(error);
+                                                        });
                                                 })
                                                     .catch((error) => {
                                                         console.error(error);
                                                     });
+                                            }
 
-                                                // Updating tier_count, decrementing by 1.
-                                                Users.update({
-                                                    tier_count: user.tier_count - 1
-                                                },
-                                                    {
-                                                        where: {
-                                                            email: email,
-                                                        },
-                                                    }
-                                                ).then((createduserurl) => {
-                                                    console.log("User tier_count updated.")
-                                                })
-                                                    .catch((error) => {
-                                                        console.error(error);
-                                                    });
-                                            })
-                                                .catch((error) => {
-                                                    console.error(error);
-                                                });
+
+                                        } catch (error) {
+                                            res.status(500).send('Server error');
+                                            console.error(error);
                                         }
-
-
-                                    } catch (error) {
-                                        res.status(500).send('Server error');
-                                        console.error(error);
+                                    } else {
+                                        res.status(400).json({ error: "A shortened URL using the preferred short url already exists, please modify"});
                                     }
+
                                 } else {
-                                    res.status(200).json({ shorturl: existingUrl.shorturl });
+                                    res.status(400).json({ shorturl: "A shortened URL for the above longUrl already exists, consider using : " + existingUrl.shorturl });
                                 }
                             }
                         }
