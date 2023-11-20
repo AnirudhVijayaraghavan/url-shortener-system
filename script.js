@@ -18,6 +18,7 @@ const createuserRouter = require('./createuser/createuser.js')
 const redirectuserRouter = require('./redirect/redirection.js')
 const submiturlRouter = require('./submiturl/submiturl.js')
 const getallurlsRouter = require('./getallurls/getallurls.js')
+const submitpreferredurlRouter = require('./getallurls/getallurls.js')
 
 // Calling all routers.
 app.use('/', healthcheckRouter);
@@ -26,6 +27,7 @@ app.use('/', createuserRouter);
 app.use('/', redirectuserRouter);
 app.use('/', submiturlRouter);
 app.use('/', getallurlsRouter);
+app.use('/', submitpreferredurlRouter);
 
 app.use(express.json());
 
