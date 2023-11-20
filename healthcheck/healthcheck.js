@@ -8,10 +8,11 @@ const port = 3000;
 const router = express.Router();
 router.use(express.json());
 require('dotenv').config();
+const tiercountrefreshRouter = require('./tiercountrefresh.js')
 
-// Commenting out logger and metrics as this is not to be deployed yet (costly).
-// const logger = require('./logger');
-// const client2 = require('./metrics');
+
+// Calling tiercountrefresh. - Executes on the first of every month.
+router.use('/', tiercountrefreshRouter);
 
 //
 const { Pool } = require('pg');
@@ -103,6 +104,7 @@ router.all('/healthcheckAPI', (req, res) => {
     res.status(405).send();
     console.log("405");
 });
+
 
 // Exporting module.
 module.exports = router

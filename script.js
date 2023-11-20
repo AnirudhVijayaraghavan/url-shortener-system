@@ -21,21 +21,6 @@ const dbUser = process.env.DB_USER;
 const dbPass = process.env.DB_PASS;
 const dbPort = process.env.DB_PORT;
 
-// Calling cron job to schedule tier_count reset every month.
-const dbConfig = {
-    host: dbHost,
-    user: dbUser,
-    port: dbPort,
-    password: dbPass,
-    database: dbName,
-};
-const pool = new Pool(dbConfig);
-const cron = require('node-cron');
-cron.schedule('* * * * *', async () => {
-    await pool.query('UPDATE users SET tier_count = 1000 WHERE tier_level = "tier 1";');
-    console.log('Request count reset');
-});
-
 // Declaring router paths.
 router.use(express.json());
 const healthcheckRouter = require('./healthcheck/healthcheck.js')
