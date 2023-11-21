@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/views/styles/styles.css">
+    <script src="/views/scripts/mainscript.js"></script>
+</head>
+
+<body>
+
+
+    <h1>Login.</h1>
+    <div class="formsection">
+
+        <form action="/user/login" method="post" id="myForm2">
+
+            <p>
+                <label for="email">Email*: </label>
+                <input class="input1" type="text" name="email" id="email" placeholder="example@domain.com"
+                    required="required" />
+                <br><br>
+
+            <div id="error_email" style="display: none; color: red;">
+                Invalid input for the Email field. Please enter a valid Email.
+                <br><br>
+            </div>
+            </p>
+            <p>
+                <label for="password">Password*:</label>
+                <input class="input1" type="text" name="password" id="password" placeholder="Password"
+                    required="required" />
+                <br><br>
+
+            <div id="error_password" style="display: none; color: red;">
+                Invalid input for the Password field.
+                <br><br>
+            </div>
+            </p>
+
+            <br>
+            <p style="text-align: center;">
+
+                <button class='glowing-btn'><span class='glowing-txt'>
+                        L<span class='faulty-letter'>O</span>GI<span class='faulty-letter'>N</span></span>
+                </button> <br> <br>
+                <button class='glowing-btn' onclick="resetButton()"><span class='glowing-txt'>
+                        R<span class='faulty-letter'>E</span>-S<span class='faulty-letter'>E</span>T</span>
+                </button><br>
+                <a href="/user/register">Don't have an account ? Register.</a>
+                <br> <br>
+            </p>
+
+            <br>
+        </form>
+
+        <br><br>
+
+</body>
+
+</html>

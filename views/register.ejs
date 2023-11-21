@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register (Create user)</title>
+    <link rel="stylesheet" href="/views/styles/styles.css" type="text/css">
+
+</head>
+
+<body>
+
+
+    <h1>Register.</h1>
+    <div class="formsection">
+
+        <form action="/user/register" method="post" id="myForm2">
+            <p>
+                <label for="username">Username*:</label>
+                <input class="input1" type="text" name="username" id="username" placeholder="User name"
+                    required="required" />
+                <br><br>
+
+            <div id="error_username" style="display: none; color: red;">
+                Invalid input for the Username field.
+                <br><br>
+            </div>
+            </p>
+
+            <p>
+                <label for="password">Password*:</label>
+                <input class="input1" type="text" name="password" id="password" placeholder="Password"
+                    required="required" />
+                <br><br>
+
+            <div id="error_password" style="display: none; color: red;">
+                Invalid input for the Password field.
+                <br><br>
+            </div>
+            </p>
+
+
+            <p>
+                <label for="email">Email*: </label>
+                <input class="input1" type="text" name="email" id="email" placeholder="example@domain.com"
+                    required="required" />
+                <br><br>
+
+            <div id="error_email" style="display: none; color: red;">
+                Invalid input for the Email field. Please enter a valid Email.
+                <br><br>
+            </div>
+            </p>
+
+            <p>
+                <label for="tier_level">Tier*: </label>
+                <input class="input1" type="text" name="tier_level" id="tier_level"
+                    placeholder="Tier 1, Tier 2, or Tier Free" required="required" />
+                <br><br>
+
+            <div id="error_tier_level" style="display: none; color: red;">
+                Invalid input for the Tier field. Please enter a valid Tier.
+                <br><br>
+            </div>
+            </p>
+
+            <br>
+            <p style="text-align: center;">
+
+                <button class='glowing-btn'><span class='glowing-txt'>
+                        S<span class='faulty-letter'>U</span>BM<span class='faulty-letter'>I</span>T</span>
+                </button> <br> <br>
+                <button class='glowing-btn' onclick="resetButton()"><span class='glowing-txt'>
+                        R<span class='faulty-letter'>E</span>-S<span class='faulty-letter'>E</span>T</span>
+                </button> <br>
+                <a href="/user/login">Have an account ? Login.</a>
+                <br> <br>
+                <!-- <input class='glowing-btn' type="submit" value="Register" id=""> -->
+            </p>
+
+            <br>
+        </form>
+        <br><br>
+    </div>
+
+    <script>
+        //The following is to reset the form, variables and localStorage.
+        function resetButton() {
+            console.log("resetButton() function called.")
+            document.getElementById("myForm2").reset();
+            console.log("Form reset.");
+            localStorage.clear();
+            console.log("Data removed from localStorage.");
+        }
+        // 
+        var form = document.getElementById("myForm2");
+        //form.addEventListener("submit", submitted);
+
+        //initializing valid variables for switch case.
+        var validusername = false;
+        var validemail = false;
+        var validpassword = false;
+        var validtier_level = false;
+
+        //regex checks variables
+        var regExString = /^[a-zA-Z0-9]+$/;
+        var regExEmailNEU = /[a-z0-9]+@[a-zA-Z].[a-zA-Z]/;
+        var regExPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+        var regExTier = /^(tier 1|tier 2|tier free)$/i;
+
+        var username = document.getElementById("username");
+        username.addEventListener("input", validate);
+
+        var emailId = document.getElementById("email");
+        emailId.addEventListener("input", validate);
+
+        var password = document.getElementById("password");
+        password.addEventListener("input", validate);
+
+        var tier_level = document.getElementById("tier_level");
+        tier_level.addEventListener("input", validate);
+
+        function validate(e) {
+            console.log("validate");
+            var value = e.target.value;
+            console.log(value);
+            var type = this.id;
+            var em = "error_" + type;
+
+            switch (type) {
+                case "username":
+                    if (!value.trim().match(regExString)) {
+                        document.getElementById(em).style.display = "block";
+                        this.style.border = "2px solid red";
+                        validusername = false;
+                    }
+                    else {
+                        document.getElementById(em).style.display = "none";
+                        this.style.border = "";
+                        validusername = true;
+                    }
+                    break;
+
+                case "password":
+                    if (!value.trim().match(regExPassword)) {
+                        document.getElementById(em).style.display = "block";
+                        this.style.border = "2px solid red";
+                        validpassword = false;
+                    }
+                    else {
+                        document.getElementById(em).style.display = "none";
+                        this.style.border = "";
+                        validpassword = true;
+                    }
+                    break;
+
+                case "email":
+                    if (!value.trim().match(regExEmailNEU)) {
+                        document.getElementById(em).style.display = "block";
+                        this.style.border = "2px solid red";
+                        validemail = false;
+                    }
+                    else {
+                        document.getElementById(em).style.display = "none";
+                        this.style.border = "";
+                        validemail = true;
+                    }
+                    break;
+
+                case "tier_level":
+                    if (!value.trim().match(regExTier)) {
+                        document.getElementById(em).style.display = "block";
+                        this.style.border = "2px solid red";
+                        validtier_level = false;
+                    }
+                    else {
+                        document.getElementById(em).style.display = "none";
+                        this.style.border = "";
+                        validtier_level = true;
+                    }
+                    break;
+            }
+        }
+
+        // function submitted(e) {
+        //     e.preventDefault();
+        //     console.log("submitted");
+        //     console.log(validusername + "|" + validemail + "|" + validpassword + "|" + validtier_level);
+        //     if (validusername && validemail && validpassword && validtier_level) {
+        //         console.log("Submitted.")
+        //     }
+        //     else {
+        //         alert("Please enter all the details, as prompted.");
+        //     }
+        // }
+
+    </script>
+</body>
+
+</html>

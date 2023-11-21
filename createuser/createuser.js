@@ -9,6 +9,7 @@ require('dotenv').config();
 const { body, validationResult } = require('express-validator');
 const { Pool } = require('pg');
 const { Sequelize, DataTypes } = require('sequelize');
+const cors = require('cors');
 
 // Declaring environment variables.
 const dbDialect = process.env.DB_DIALECT;
@@ -22,7 +23,6 @@ const dbPort = process.env.DB_PORT;
 router.use(express.json());
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
-
 
 // The object below has the postgres test DB credentials / configurations. Port : 5432, name : test, user : postgres.
 
@@ -73,7 +73,7 @@ const Users = UserSequelize.define('users', {
 
 
 // INSERT User ON SUCCESSFUL VALIDATIONS.
-router.post('/createuser', [
+router.post('/user/register', [
     body('username')
         .not().isEmpty().withMessage('Name cannot be empty')
         .isString().withMessage('Name must be a string'),

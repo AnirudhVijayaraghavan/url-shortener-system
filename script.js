@@ -8,10 +8,9 @@ const app = express();
 const port = 3000; // Connects to localhost:3000
 const router = express.Router();
 require('dotenv').config();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-const { Pool } = require('pg');
 
+const { Pool } = require('pg');
+const cors = require('cors');
 
 // Declaring environment variables.
 const dbDialect = process.env.DB_DIALECT;
@@ -39,9 +38,29 @@ app.use('/', redirectuserRouter);
 app.use('/', submiturlRouter);
 app.use('/', getallurlsRouter);
 app.use('/', submitpreferredurlRouter);
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
+
+// Starting EJS modules.
+app.use('/views', express.static('views'));
+app.set('view engine', 'ejs');
+app.get("/", (req, res) => {
+    res.render("index");
+})
+app.get('/user/login', (req, res) => {
+    res.render("login");
+})
+app.get('/user/register', (req, res) => {
+    res.render("register");
+})
+app.get('/user/submiturl', (req, res) => {
+    res.render("submiturl", {user: "anirudh"});
+})
+app.get('/user/getallurls', (req, res) => {
+    res.render("getallurls");
+})
 
 //Starting server on port 3000.
 app.listen(port, () => {

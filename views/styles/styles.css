@@ -1,0 +1,1257 @@
+body {
+  background-color: #FFFFFF;
+  margin: 0;
+  font-family: "Segoe UI", Arial, Helvetica, Sans Serif;
+  font-size: larger;
+  color: black;
+  animation: fadeInAnimation ease 3s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  overflow-x: hidden;
+  /* display: grid;
+  grid-template-columns: auto 0px;  */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+/* color codes : blue : #006FB2, white : #FFFFFF, light grey : #1B1D1F, black : #101213 */
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+hr {
+  color: #006FB2;
+}
+
+.hrforaboutme {
+  border-width: 10px;
+  border-style: none;
+  border-top-style: dotted;
+  width: 10%;
+  /* background-color: #EAF6F6; */
+  border-color: red;
+}
+
+/* The following is to animate the box container circle classes. */
+.box {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  display: table;
+}
+
+.container {
+  height: 15px;
+  width: 105px;
+  display: flex;
+  position: relative;
+  align-items: center;
+
+
+}
+
+.container .circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #1B1D1F;
+  animation: move 1s linear 0s infinite;
+  margin-right: 30px;
+
+
+}
+
+.container .circle:first-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: grow 1s linear 0s infinite;
+}
+
+.container .circle:last-child {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 0;
+  animation: grow 1s linear 0s infinite reverse;
+}
+
+.box-reverse {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  display: table;
+}
+
+.container-reverse {
+  height: 15px;
+  width: 105px;
+  display: flex;
+  position: relative;
+  align-items: center;
+
+
+}
+
+.container-reverse .circle-reverse {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #1B1D1F;
+  animation: moveReverse 1s linear 0s infinite;
+  margin-right: 30px;
+
+
+}
+
+.container-reverse .circle-reverse:first-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: grow 1s linear 0s infinite reverse;
+}
+
+.container-reverse .circle-reverse:last-child {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 0;
+  animation: grow 1s linear 0s infinite;
+}
+
+@keyframes grow {
+  from {
+    transform: scale(0, 0);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+}
+
+@keyframes move {
+  from {
+    transform: translateX(0px)
+  }
+
+  to {
+    transform: translateX(45px)
+  }
+}
+
+@keyframes moveReverse {
+  from {
+    transform: translateX(45px)
+  }
+
+  to {
+    transform: translateX(0px)
+  }
+}
+
+/* The following is to center the main images. */
+.mainprofilephotoleft {
+  display: block;
+  margin-left: 15%;
+  margin-right: auto;
+  width: 20%;
+  border-radius: 0%;
+  transition: transform .2s ease-in-out;
+  padding: 20px;
+  border-color: white;
+}
+
+.mainprofilephotoright {
+  display: block;
+  margin-left: auto;
+  margin-right: 10%;
+  width: 25%;
+  border-radius: 0%;
+  transition: transform .2s ease-in-out;
+  padding: 20px;
+  border-color: white;
+}
+
+.mainprofilephotobottomleft {
+  display: block;
+  margin-left: 5%;
+  margin-right: auto;
+  width: 20%;
+  border-radius: 0%;
+  transition: transform .2s ease-in-out;
+  padding: 20px;
+  position: relative;
+  bottom: -200px;
+  border-color: white;
+}
+
+.mainprofilephotobottomright {
+  display: block;
+  margin-left: auto;
+  margin-right: 5%;
+  width: 17%;
+  border-radius: 0%;
+  transition: transform .2s ease-in-out;
+  padding: 20px;
+  position: relative;
+  bottom: -400px;
+  z-index: 2;
+  border-color: white;
+}
+
+.mainprofilephotoleft:hover {
+  -ms-transform: scale(1.4);
+  /* IE 9 */
+  -webkit-transform: scale(1.4);
+  /* Safari 3-8 */
+  transform: scale(1.4);
+}
+
+.mainprofilephotoright:hover {
+  -ms-transform: scale(1.4);
+  /* IE 9 */
+  -webkit-transform: scale(1.4);
+  /* Safari 3-8 */
+  transform: scale(1.4);
+}
+
+.mainprofilephotobottomleft:hover {
+  -ms-transform: scale(1.4);
+  /* IE 9 */
+  -webkit-transform: scale(1.4);
+  /* Safari 3-8 */
+  transform: scale(1.4);
+}
+
+.mainprofilephotobottomright:hover {
+  -ms-transform: scale(1.4);
+  /* IE 9 */
+  -webkit-transform: scale(1.4);
+  /* Safari 3-8 */
+  transform: scale(1.4);
+}
+
+/* The following is to animate and style the header and nav bar to slide in left. */
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-60%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(80%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+h1 {
+  font-size: 70px;
+  text-align: center;
+  font-family: 'Dancing Script', cursive;
+  font-family: 'Quicksand', sans-serif;
+  /* animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-name: slideInLeft; */
+  padding: 50px;
+  margin-top: 0px;
+}
+
+h2 {
+  font-family: 'Dancing Script', cursive;
+  font-family: 'Quicksand', sans-serif;
+  text-align: center;
+  padding: 60px;
+  /* animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-name: slideInRight; */
+  font-size: 50px;
+}
+
+ul {
+
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 20%;
+  background-color: red;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+  color: white;
+}
+
+li a {
+  margin-left: 20px;
+  margin-right: 30px;
+  display: block;
+  color: #000;
+  padding: 38px 26px;
+  text-decoration: none;
+  color: white;
+  font-size: 1.5vw;
+  transition: transform .2s;
+}
+
+li a:hover {
+  -ms-transform: scale(1.3);
+  /* IE 9 */
+  -webkit-transform: scale(1.3);
+  /* Safari 3-8 */
+  transform: scale(1.3);
+}
+
+/* The following is to style the right pane (right section with all other details). */
+.rightpane {
+  margin-left: 20%;
+  z-index: 0;
+}
+
+footer {
+  position: fixed;
+
+  bottom: 0;
+  color: white;
+  background-color: #1B1D1F;
+  text-align: center;
+  width: 80%;
+
+  opacity: 100%;
+  transition: opacity 0.5s;
+  z-index: 2;
+}
+
+h3 {
+  margin-left: 50px;
+  font-size: 30px;
+}
+
+#centerh3 {
+  margin-left: 50px;
+  margin-right: 50px;
+  text-align: center;
+}
+
+#rightsideh3 {
+  text-align: right;
+  margin-right: 50px;
+}
+
+p {
+  margin-left: 50px;
+  margin-right: 50px;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* The following is to style the section containers and align text properly. */
+.educationcont {
+  margin-left: 50px;
+}
+
+.wecont {
+  margin-left: 50px;
+}
+
+.skillscont {
+  margin-left: 50px;
+}
+
+.projectscertscont {
+  margin-left: 50px;
+}
+
+.contactmecont {
+  margin-left: 50px;
+}
+
+.contactmecont .dlheading {
+  text-align: center;
+  margin-right: 50px;
+}
+
+.contactmecont dt {
+  text-align: center;
+}
+
+/* The following is to style the educationcont logos. */
+.educationcontlogoleft {
+  width: 100px;
+  background: transparent;
+}
+
+/* The following is for DL tag styling.  */
+.dlheading {
+  font-size: 30px;
+  margin-right: 50px;
+}
+
+dd {
+  margin-right: 50px;
+  text-align: justify;
+}
+
+table {
+  margin-left: 50px;
+}
+
+.skilliconpics {
+  width: 30px;
+  height: 30px;
+  border-radius: 40%;
+}
+
+.skilliconpics:hover {
+  animation: effect 0.4s infinite;
+}
+
+/* The following is to edit the links in DT tags. */
+dt {
+  margin-right: 50px;
+}
+
+/* dt a {
+  color: white;
+}
+
+dt a:hover {
+  color: red;
+
+} */
+
+dt a {
+  color: white;
+  position: relative;
+  text-decoration: none;
+}
+
+dt a::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  border-radius: 4px;
+  background-color: navy;
+  bottom: 0;
+  left: 0;
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform .3s ease-in-out;
+}
+
+dt a:hover::before {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+dt a:hover .walnutBBB {
+  display: block;
+  margin-right: 50px;
+}
+
+.walnutBBB {
+  display: none;
+  width: 300px;
+  position: relative;
+  float: right;
+
+}
+
+/* The following is to style the image gallery in certifications section. */
+
+.gallery {
+  margin: 5px;
+  border: 1px solid #ccc;
+  float: center;
+  width: 180px;
+}
+
+.gallery img {
+  width: 50%;
+  height: auto;
+}
+
+.gallery .mainimg {
+  width: 100%;
+  height: auto;
+}
+
+figcaption {
+  padding: 10px;
+  text-align: center;
+}
+
+.galleryhover {
+  display: none;
+  width: 300px;
+  position: absolute;
+  float: right;
+}
+
+.gallery:hover .galleryhover {
+  display: inline;
+}
+
+/* The following is to style the webpage in various screen sizes, using media query. */
+@media only screen and (max-width: 800px) {
+  .openbtn {
+    display: none;
+  }
+
+  .mainprofilephotoleft {
+    display: none;
+    margin-left: 2%;
+    margin-right: auto;
+    width: 12%;
+    border-radius: 0%;
+    transition: transform .2s ease-in-out;
+    padding: 20px;
+  }
+
+  .mainprofilephotoright {
+    display: none;
+    margin-left: auto;
+    margin-right: 5%;
+    width: 15%;
+    border-radius: 0%;
+    transition: transform .2s ease-in-out;
+    padding: 20px;
+  }
+
+  .mainprofilephotobottomleft {
+    display: none;
+    margin-left: 5%;
+    margin-right: auto;
+    width: 12%;
+    border-radius: 0%;
+    transition: transform .2s ease-in-out;
+    padding: 20px;
+  }
+
+  .mainprofilephotobottomright {
+    display: none;
+    margin-left: 5%;
+    margin-right: auto;
+    width: 12%;
+    border-radius: 0%;
+    transition: transform .2s ease-in-out;
+    padding: 20px;
+  }
+
+  h2 {
+    font-family: 'Dancing Script', cursive;
+    font-family: 'Quicksand', sans-serif;
+    text-align: center;
+    padding: 60px;
+    /* animation-duration: 3s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0s;
+    animation-iteration-count: 1;
+    animation-name: slideInRight; */
+    font-size: 50px;
+    margin-bottom: 0px;
+    margin-top: 300px;
+    padding-bottom: 0px;
+  }
+
+  /* .formsection {
+    width: 100%;
+    border: 3px solid red;
+    margin: 0 auto;
+    padding-left: 100px;
+    padding-right: 100px;
+  } */
+
+  label {
+    float: left;
+    width: 150px;
+  }
+
+  #scrollmag {
+    display: none;
+  }
+
+}
+
+/* The following is to make the scrolling in page through nav bar 
+  smoother. */
+html {
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  line-height: 40px;
+  letter-spacing: 1px;
+}
+
+/* The following is to style the contact me logo section. */
+.contactlogo {
+  width: 50px;
+  padding: 50px;
+}
+
+/* The following is to make the icons wiggle. */
+.contactlogo:hover {
+  animation: effect 0.4s infinite;
+}
+
+@keyframes effect {
+  0% {
+    transform: translateX(0px) rotate(0deg);
+  }
+
+  20% {
+    transform: translateX(-4px) rotate(-4deg);
+  }
+
+  40% {
+    transform: translateX(-2px) rotate(-2deg);
+  }
+
+  60% {
+    transform: translateX(4px) rotate(4deg);
+  }
+
+  80% {
+    transform: translateX(2px) rotate(2deg);
+  }
+
+  100% {
+    transform: translateX(0px) rotate(0deg);
+  }
+}
+
+/* The following is the CSS for the progress bar and 
+back to top button. */
+/* header {
+  position: relative;
+} */
+.resume {
+  position: fixed;
+  right: .3rem;
+  top: 4rem;
+  border-radius: 100%;
+  background: white;
+  padding: 0.5rem;
+  border: none;
+  cursor: pointer;
+  opacity: 100%;
+  transition: opacity 0.5s;
+}
+
+.resume:hover {
+  opacity: 60%;
+}
+
+
+.resume-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: red;
+}
+
+.back-to-top {
+  position: fixed;
+  right: .3rem;
+  bottom: 10rem;
+  border-radius: 100%;
+  background: white;
+  padding: 0.5rem;
+  border: none;
+  cursor: pointer;
+  opacity: 100%;
+  transition: opacity 0.5s;
+}
+
+.back-to-top:hover {
+  opacity: 60%;
+}
+
+.hidden {
+  opacity: 0%;
+}
+
+.back-to-top-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: navy;
+  transform: rotate(-0.25turn);
+}
+
+.back-to-top-icon-index {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: navy;
+  transform: rotate();
+}
+
+.progress-bar {
+  height: 1rem;
+  /* background: red; */
+  background-image: linear-gradient(to right, black, #006FB2);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+/* The following CSS is required for ScrollFade.js */
+.scrollFade {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.scrollFade--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scrollFade--visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.scrollFade--animate {
+  transition: opacity 0.4s ease-in-out;
+}
+
+/* The following is to style the open and close buttons.  */
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #101213;
+  overflow-x: hidden;
+  transition: 0.5s;
+  z-index: 1;
+}
+
+.sidebar a {
+  margin-left: 20px;
+  margin-right: 30px;
+  display: block;
+  color: #000;
+  padding: 38px 26px;
+  text-decoration: none;
+  color: white;
+  font-size: 1.3vw;
+  transition: transform .2s;
+}
+
+.sidebar a:hover {
+  -ms-transform: scale(1.3);
+  /* IE 9 */
+  -webkit-transform: scale(1.3);
+  /* Safari 3-8 */
+  transform: scale(1.3);
+}
+
+.sidebar .closebtn {
+  position: absolute;
+  top: -33px;
+  right: -45px;
+  font-size: 34px;
+  margin-left: 50px;
+}
+
+.openbtn {
+  position: fixed;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: black;
+  color: black;
+  padding: 10px 15px;
+  border: none;
+  background-color: transparent;
+  transition: 0.3s;
+}
+
+.openbtn:hover {
+  /* background-color: black; */
+  transform: scale(1.2)
+}
+
+#main {
+  transition: margin-left .5s;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  color: white;
+  background-color: #1B1D1F;
+  text-align: center;
+  width: 100%;
+  opacity: 100%;
+  transition: opacity 1s;
+}
+
+.footerspan {
+  position: absolute;
+}
+
+.footerspanlinks a {
+  color: #006FB2;
+  font-family: 'Play', sans-serif;
+  text-align: center;
+  text-decoration: none;
+  padding: 5%;
+}
+
+.footerspanlinks a:hover {
+  animation: fadeInAnimation ease 2s;
+  color: #fff;
+}
+
+/* The following is to keep the background image of various sections fixed using background attachment property. */
+.fixed-bg-we {
+  margin: 0 0;
+  background-image: url("../PicturesIcons/tim-arterbury-EVGRjxDA7WA-unsplash.jpg");
+  min-height: 600px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-bottom: 30px;
+}
+
+.fixed-bg-story {
+  margin: 0 0;
+  background-image: url("../PicturesIcons/aron-yigin-sNY6B9NsPP8-unsplash.jpg");
+  min-height: 400px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-bottom: 30px;
+}
+
+.fixed-bg-initial {
+  margin: 0 0;
+  background-image: url("../PicturesIcons/venti-views-1cqIcrWFQBI-unsplash.jpg");
+  min-height: 600px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-bottom: 30px;
+}
+
+.fixed-bg-edu {
+  margin: 0 0;
+  background-image: url("../PicturesIcons/borderpolar-photographer-AMXFr97d00c-unsplash.jpg");
+  min-height: 600px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-bottom: 30px;
+  color: white;
+
+  text-align: left;
+}
+
+.fixed-bg-test {
+  margin: 0 0;
+  background-color: #1B1D1F;
+  min-height: 600px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-bottom: 30px;
+  color: white;
+
+  text-align: left;
+}
+
+/* The following is to style the form section. */
+
+.formsection {
+  width: 80%;
+  max-width: 600px;
+  border: 3px solid #006FB2;
+  margin: 0 auto;
+  position: relative;
+  right: 50px;
+  left: -25px;
+  display: flex;
+  flex-direction: column;
+  padding: 70px 40px 70px 40px;
+}
+
+
+
+label {
+  float: left;
+  width: 200px;
+}
+
+/* DO NOT DELETE THESE 2. */
+.scrollmag {
+  opacity: .5;
+  display: none;
+  float: right;
+  left: 500px;
+}
+
+/* The following css is for the glowing red buttons in the form section. */
+.glowing-btn {
+  position: relative;
+  color: var(--glow-color);
+  cursor: pointer;
+  padding: 0.35em 1em;
+  border: 0.15em solid var(--glow-color);
+  border-radius: 0.45em;
+  background: none;
+  perspective: 2em;
+  font-family: "Raleway", sans-serif;
+  font-size: .7em;
+  font-weight: 900;
+  letter-spacing: 1em;
+
+  -webkit-box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
+    0px 0px 0.5em 0px var(--glow-color);
+  -moz-box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
+    0px 0px 0.5em 0px var(--glow-color);
+  box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
+    0px 0px 0.5em 0px var(--glow-color);
+  animation: border-flicker 2s linear infinite;
+}
+
+.glowing-txt {
+  float: left;
+  margin-right: -0.8em;
+  -webkit-text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3),
+    0 0 0.45em var(--glow-color);
+  -moz-text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3),
+    0 0 0.45em var(--glow-color);
+  text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3), 0 0 0.45em var(--glow-color);
+  animation: text-flicker 3s linear infinite;
+}
+
+.faulty-letter {
+  opacity: 0.5;
+  animation: faulty-flicker 2s linear infinite;
+}
+
+.glowing-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.7;
+  filter: blur(1em);
+  transform: translateY(120%) rotateX(95deg) scale(1, 0.35);
+  background: var(--glow-color);
+  pointer-events: none;
+}
+
+.glowing-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  z-index: -1;
+  background-color: var(--glow-color);
+  box-shadow: 0 0 2em 0.2em var(--glow-color);
+  transition: opacity 100ms linear;
+}
+
+.glowing-btn:hover {
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: none;
+  animation: none;
+}
+
+.glowing-btn:hover .glowing-txt {
+  animation: none;
+}
+
+.glowing-btn:hover .faulty-letter {
+  animation: none;
+  text-shadow: none;
+  opacity: 1;
+}
+
+.glowing-btn:hover:before {
+  filter: blur(1.5em);
+  opacity: 1;
+}
+
+.glowing-btn:hover:after {
+  opacity: 1;
+}
+
+@keyframes faulty-flicker {
+  0% {
+    opacity: 0.1;
+  }
+
+  2% {
+    opacity: 0.1;
+  }
+
+  4% {
+    opacity: 0.5;
+  }
+
+  19% {
+    opacity: 0.5;
+  }
+
+  21% {
+    opacity: 0.1;
+  }
+
+  23% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0.5;
+  }
+
+  83% {
+    opacity: 0.4;
+  }
+
+  87% {
+    opacity: 1;
+  }
+}
+
+@keyframes text-flicker {
+  0% {
+    opacity: 0.1;
+  }
+
+  2% {
+    opacity: 1;
+  }
+
+  8% {
+    opacity: 0.1;
+  }
+
+  9% {
+    opacity: 1;
+  }
+
+  12% {
+    opacity: 0.1;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 0.3;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0.7;
+  }
+
+  72% {
+    opacity: 0.2;
+  }
+
+  77% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes border-flicker {
+  0% {
+    opacity: 0.1;
+  }
+
+  2% {
+    opacity: 1;
+  }
+
+  4% {
+    opacity: 0.1;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+:root {
+  --glow-color: #006FB2;
+}
+
+
+/* The following is to style the input fields. */
+.input1 {
+
+  box-shadow: inset #abacaf 0 0 0 2px;
+  border: 0;
+  background: rgba(0, 0, 0, 0);
+  appearance: none;
+  position: relative;
+  border-radius: 3px;
+  line-height: 1.4;
+  color: black;
+  font-size: 16px;
+  font-weight: 400;
+  transition: all .4s ease;
+
+}
+
+.input1:hover {
+  box-shadow: 0 0 0 0 #fff inset, #006FB2 0 0 0 2px;
+}
+
+.input1:focus {
+  background: #fff;
+  outline: 0;
+  box-shadow: 0 0 0 0 #fff inset, #006FB2 0 0 0 3px;
+  color: black;
+}
+
+main#carousel {
+  grid-row: 1 / 2;
+  grid-column: 1 / 8;
+  width: 100vw;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 600px;
+  --items: 5;
+  --middle: 3;
+  --position: 1;
+  pointer-events: none;
+}
+
+div.item {
+  position: absolute;
+  width: 300px;
+  height: 400px;
+  background-color: coral;
+  --r: calc(var(--position) - var(--offset));
+  --abs: max(calc(var(--r) * -1), var(--r));
+  transition: all 0.25s linear;
+  transform: rotateY(calc(-10deg * var(--r))) translateX(calc(-300px * var(--r)));
+  z-index: calc((var(--position) - var(--abs)));
+}
+
+div.item:nth-of-type(1) {
+  --offset: 1;
+  background-color: #90f1ef;
+}
+
+div.item:nth-of-type(2) {
+  --offset: 2;
+  background-color: #ff70a6;
+}
+
+div.item:nth-of-type(3) {
+  --offset: 3;
+  background-color: #ff9770;
+}
+
+div.item:nth-of-type(4) {
+  --offset: 4;
+  background-color: #ffd670;
+}
+
+div.item:nth-of-type(5) {
+  --offset: 5;
+  background-color: #e9ff70;
+}
+
+input:nth-of-type(1) {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+}
+
+input:nth-of-type(1):checked~main#carousel {
+  --position: 1;
+}
+
+input:nth-of-type(2) {
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
+}
+
+input:nth-of-type(2):checked~main#carousel {
+  --position: 2;
+}
+
+input:nth-of-type(3) {
+  grid-column: 4 /5;
+  grid-row: 2 / 3;
+}
+
+input:nth-of-type(3):checked~main#carousel {
+  --position: 3;
+}
+
+input:nth-of-type(4) {
+  grid-column: 5 / 6;
+  grid-row: 2 / 3;
+}
+
+input:nth-of-type(4):checked~main#carousel {
+  --position: 4;
+}
+
+input:nth-of-type(5) {
+  grid-column: 6 / 7;
+  grid-row: 2 / 3;
+}
+
+input:nth-of-type(5):checked~main#carousel {
+  --position: 5;
+}

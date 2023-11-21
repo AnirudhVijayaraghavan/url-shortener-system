@@ -146,7 +146,7 @@ const User_Urls = UserUrlsSequelize.define('user_urls', {
 });
 // Endpoint to create a shortened URL
 // INSERT Url ON SUCCESSFUL AUTHENTICATION.
-router.post('/submiturl', [
+router.post('/user/submiturl', [
     body('longUrl')
         .not().isEmpty().withMessage('Your URL cannot be empty')
         .isString().withMessage('Your URL must be a string')
