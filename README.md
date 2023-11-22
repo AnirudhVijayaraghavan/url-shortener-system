@@ -19,21 +19,21 @@ j. Github - <3 VCS <br>
    ``` npm install ```
 3. Run NPM start command : <br>
    ``` npm start ```
-4. There are 5 endpoints to test out : POST/createuser, POST/submiturl, POST/submitpreferredurl, GET/user/getallurls, GET/:shorturlid (redirections).
-5. POST/createuser data :
+4. There are 5 endpoints to test out : POST/user/createuser, POST/submiturl, POST/submitpreferredurl, GET/user/getallurls, GET/:shorturlid (redirections).
+5. POST/user/createuser data structure for postman:
    {
     "username" : "Anirudh V",
     "email" : "aniruasdasASSd@@@gas2@@dma@sil.com",
     "password" : "asdabd@sasASDSA@@sdiu2u",
     "tier_level" : "Tier 2"
    }
-6. POST/submiturl data : 
+6. POST/submiturl data structure for postman: 
    {
     "longUrl" : "https://chat.openai.com/c/20c1d604-489c-45c3-aa6d-6f85daa6568c"
    }
-7. POST/submitpreferredurl data :
+7. POST/submitpreferredurl data structure for postman:
    {
     "longUrl" : "https://chat.openai.som/c/20c1d604-489c-4asdasdasdfasdasd8asdasd5sdssdsdsd" ,
     "preferredShorty" : "123as222"    
    }
-  
+8. Connect to localhost:3000/ (for a front end that uses EJS (basic formatting and CSS only.))
