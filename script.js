@@ -7,6 +7,8 @@ const nodemon = require('nodemon');
 const app = express();
 const port = 3000; // Connects to localhost:3000
 const router = express.Router();
+const session = require('express-session');
+const flash = require('express-flash');
 require('dotenv').config();
 
 const { Pool } = require('pg');
@@ -41,6 +43,13 @@ app.use('/', submitpreferredurlRouter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(
+    session({
+        secret: 'secret',
+        resave: false,
+        saveUninitialized: false
+    }));
+app.use(flash());
 
 
 // Starting EJS modules.
@@ -56,7 +65,7 @@ app.get('/user/register', (req, res) => {
     res.render("register");
 })
 app.get('/user/submiturl', (req, res) => {
-    res.render("submiturl", {user: "anirudh"});
+    res.render("submiturl", { user: "anirudh" });
 })
 app.get('/user/getallurls', (req, res) => {
     res.render("getallurls");

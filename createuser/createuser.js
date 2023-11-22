@@ -10,6 +10,8 @@ const { body, validationResult } = require('express-validator');
 const { Pool } = require('pg');
 const { Sequelize, DataTypes } = require('sequelize');
 const cors = require('cors');
+const session = require('express-session');
+const flash = require('express-flash');
 
 // Declaring environment variables.
 const dbDialect = process.env.DB_DIALECT;
@@ -23,6 +25,7 @@ const dbPort = process.env.DB_PORT;
 router.use(express.json());
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
+
 
 // The object below has the postgres test DB credentials / configurations. Port : 5432, name : test, user : postgres.
 
@@ -141,7 +144,9 @@ router.post('/user/register', [
                         tier_level: String(tier_level).toLowerCase(),
                         tier_count: tier_count
                     }).then((createdUser) => {
-                        res.status(201).json(createdUser);
+                        // res.status(201).json(createdUser);
+                        // req.flash("success_msg","Registered, please login.")
+                        res.redirect('/user/login');
                     })
                         .catch((error) => {
                             console.error(error);
