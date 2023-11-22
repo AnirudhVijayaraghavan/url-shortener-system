@@ -6,7 +6,7 @@ a. Javascript <br>
 b. NodeJS - Backend <br>
 c. PostgreSQL - Database <br>
 d. Sequelize ORM - Relational mapping using objects (to make life easier) <br>
-e. ReactJS - Frontend <br>
+e. EJS - Frontend <br>
 f. ExpressJS - Routing <br>
 g. BuyMeACoffee :) please ? - Dosh <br>
 h. RESTful APIs - HTTPS requests <br>
