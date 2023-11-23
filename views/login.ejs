@@ -19,11 +19,7 @@
 
 
         <form action="/user/login" method="post" id="myForm2">
-            <!-- <% if(messages.success_msg) { %>
 
-                <%= messages.success_msg %>
-
-                    <% } %> -->
             <p>
                 <label for="email">Email*: </label>
                 <input class="input1" type="text" name="email" id="email" placeholder="example@domain.com"
@@ -64,7 +60,25 @@
         </form>
 
         <br><br>
+    </div>
+    <script>
+        function submitData() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/user/submiturl', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
 
+            // Send user ID stored in session (fetched from server)
+            xhr.send(JSON.stringify({ email: email, password: password }));
+        }
+        //The following is to reset the form, variables and localStorage.
+        function resetButton() {
+            console.log("resetButton() function called.")
+            document.getElementById("myForm2").reset();
+            console.log("Form reset.");
+            localStorage.clear();
+            console.log("Data removed from localStorage.");
+        }
+    </script>
 </body>
 
 </html>
