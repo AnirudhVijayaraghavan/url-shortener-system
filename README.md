@@ -6,12 +6,12 @@ a. Javascript <br>
 b. NodeJS - Backend <br>
 c. PostgreSQL - Database <br>
 d. Sequelize ORM - Relational mapping using objects (to make life easier) <br>
-e. EJS - Frontend <br>
-f. ExpressJS - Routing <br>
-g. BuyMeACoffee :) please ? - Dosh <br>
-h. RESTful APIs - HTTPS requests <br>
-i. DigitalOcean - Deployment <br>
-j. Github - <3 VCS <br>
+e. ExpressJS - Routing <br>
+f. RESTful APIs - HTTPS requests <br>
+g. Github - VCS <br>
+h. React
+i. Docker
+j. AWS - ECS, ECR
 ---
 1. Clone the repo : <br>
    ``` git clone https://github.com/AnirudhVijayaraghavan/url-shortener-system.git ```
@@ -36,4 +36,4 @@ j. Github - <3 VCS <br>
     "longUrl" : "https://chat.openai.som/c/20c1d604-489c-4asdasdasdfasdasd8asdasd5sdssdsdsd" ,
     "preferredShorty" : "123as222"    
    }
-8. Connect to localhost:3000/ (for a front end that uses EJS (basic formatting and CSS only.))
+8. Connect to localhost:3000/ (for a front end that uses React)
